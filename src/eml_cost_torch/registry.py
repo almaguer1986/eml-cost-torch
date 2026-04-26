@@ -27,7 +27,17 @@ LINEAR_FORM = x * W + b  # Linear / Conv*d
 ZERO_FORM = x  # identity-shaped (Dropout @ inference, MaxPool, etc.)
 RELU_FORM = sp.Max(0, x)  # ReLU — not analytic but symbolic
 LEAKY_RELU_FORM = sp.Max(alpha * x, x)
+
+# GELU exact (erf-based) — PNE
 GELU_FORM = sp.S.Half * x * (1 + sp.erf(x / sp.sqrt(2)))
+# GELU tanh-approximation — NOT PNE (tanh is EML-elementary)
+GELU_TANH_FORM = (
+    sp.S.Half * x
+    * (1 + sp.tanh(sp.sqrt(2 / sp.pi) * (x + sp.Rational(44715, 1000000) * x ** 3)))
+)
+# GELU sigmoid-approximation (CLIP/QuickGELU) — NOT PNE
+QUICK_GELU_FORM = x * (1 / (1 + sp.exp(sp.Rational(-1702, 1000) * x)))
+
 SIGMOID_FORM = 1 / (1 + sp.exp(-x))
 TANH_FORM = sp.tanh(x)
 SOFTPLUS_FORM = sp.log(1 + sp.exp(x))
@@ -35,6 +45,9 @@ ELU_FORM = sp.Piecewise((alpha * (sp.exp(x) - 1), x < 0), (x, True))
 SILU_FORM = x / (1 + sp.exp(-x))  # SiLU / Swish
 MISH_FORM = x * sp.tanh(sp.log(1 + sp.exp(x)))
 SOFTMAX_FORM = sp.exp(x) / (sp.exp(x) + sp.exp(y))  # 2-key approximation
+SOFTSIGN_FORM = x / (1 + sp.Abs(x))
+THRESHOLD_FORM = sp.Piecewise((x, x > 0), (0, True))  # generic piecewise
+
 LAYERNORM_FORM = (x - mu) / sp.sqrt(sigma ** 2 + eps)
 BATCHNORM_FORM = (x - mu) / sp.sqrt(sigma ** 2 + eps) * alpha + beta
 RMSNORM_FORM = x / sp.sqrt(sigma ** 2 + eps)
@@ -47,6 +60,16 @@ HARDSWISH_FORM = x * sp.Piecewise(
 HARDSIGMOID_FORM = sp.Piecewise(
     (0, x < -3), (1, x > 3), ((x + 3) / 6, True),
 )
+
+# Gated linear unit family. The first operand `x` is the value, the
+# second `y` is the gate input. Both halves are routed through different
+# linear projections in practice; the symbolic form captures only the
+# elementwise gate*value pattern.
+GLU_FORM = x * SIGMOID_FORM.subs(x, y)            # x * sigmoid(y)
+GEGLU_FORM = x * GELU_FORM.subs(x, y)             # x * GELU(y) — PNE via erf
+GEGLU_TANH_FORM = x * GELU_TANH_FORM.subs(x, y)   # x * GELU_tanh(y) — NOT PNE
+SWIGLU_FORM = x * SILU_FORM.subs(x, y)            # x * SiLU(y)
+REGLU_FORM = x * sp.Max(0, y)                     # x * ReLU(y)
 
 
 # --- Registry: torch.nn class name (string) -> symbolic form ---
@@ -101,6 +124,18 @@ TORCH_LAYER_REGISTRY: dict[str, sp.Basic] = {
     "Hardsigmoid": HARDSIGMOID_FORM,
     "Hardshrink": LEAKY_RELU_FORM,
     "Softshrink": LEAKY_RELU_FORM,
+    "Softsign": SOFTSIGN_FORM,
+    "Threshold": THRESHOLD_FORM,
+    # Gated linear units (PyTorch ships GLU; GeGLU/SwiGLU/ReGLU are
+    # community-standard transformer modules with consistent class names
+    # across HuggingFace, Diffusers, MosaicML, and major LLM repos).
+    "GLU": GLU_FORM,
+    "GeGLU": GEGLU_FORM,
+    "GEGLU": GEGLU_FORM,
+    "SwiGLU": SWIGLU_FORM,
+    "SWIGLU": SWIGLU_FORM,
+    "ReGLU": REGLU_FORM,
+    "REGLU": REGLU_FORM,
     # Normalisation
     "LayerNorm": LAYERNORM_FORM,
     "BatchNorm1d": BATCHNORM_FORM,
@@ -130,13 +165,13 @@ TORCH_LAYER_REGISTRY: dict[str, sp.Basic] = {
     "Reshape": ZERO_FORM,
     # HuggingFace transformers (added 2026-04-26 for GPT-2 / BERT coverage)
     "Conv1D": LINEAR_FORM,                  # HF's GPT-2 Conv1D = transposed Linear
-    "NewGELUActivation": GELU_FORM,         # HF's GPT-2 GELU
-    "GELUActivation": GELU_FORM,            # HF's standard GELU class
-    "FastGELUActivation": GELU_FORM,        # HF's tanh-approximation GELU
-    "QuickGELUActivation": GELU_FORM,       # HF's CLIP-style GELU (uses sigmoid)
-    "PytorchGELUTanh": GELU_FORM,           # HF's tanh-approximation
-    "ClippedGELUActivation": GELU_FORM,
-    "AccurateGELUActivation": GELU_FORM,
+    "NewGELUActivation": GELU_TANH_FORM,    # HF's GPT-2 GELU (tanh-approx via 0.044715)
+    "GELUActivation": GELU_FORM,            # HF's standard exact GELU
+    "FastGELUActivation": GELU_TANH_FORM,   # HF's tanh-approximation GELU
+    "QuickGELUActivation": QUICK_GELU_FORM, # HF's CLIP-style GELU (sigmoid-approx)
+    "PytorchGELUTanh": GELU_TANH_FORM,      # HF's tanh-approximation
+    "ClippedGELUActivation": GELU_FORM,     # HF's clipped exact GELU
+    "AccurateGELUActivation": GELU_FORM,    # HF's accurate exact GELU
     "MishActivation": MISH_FORM,
     "T5LayerNorm": RMSNORM_FORM,            # T5's "LayerNorm" is actually RMSNorm
     "LlamaRMSNorm": RMSNORM_FORM,           # Llama / Llama2 / Llama3

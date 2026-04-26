@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eml-cost-torch"
-version = "0.4.0"
+version = "0.5.0"
 description = "Per-layer Pfaffian profile and EML routing depth for any torch.nn.Module."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -33,7 +33,7 @@ classifiers = [
     "Topic :: Scientific/Engineering :: Artificial Intelligence",
 ]
 dependencies = [
-    "eml-cost>=0.3.0",
+    "eml-cost>=0.6.0",
     "sympy>=1.12",
 ]
 
@@ -58,7 +58,7 @@ Issues = "https://github.com/almaguer1986/eml-cost-torch/issues"
 where = ["src"]
 
 [tool.setuptools.package-data]
-eml_cost_torch = ["py.typed"]
+eml_cost_torch = ["py.typed", "data/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

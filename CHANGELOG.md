@@ -4,6 +4,91 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
+## [0.5.0] — 2026-04-26 — `diagnose()` redesigned around per-activation empirical lookup (E-192)
+
+### TL;DR
+
+`diagnose()` no longer gates fp16-drift / activation-variance risk
+predictions on the symbolic Pfaffian-not-EML classification. Instead,
+it ships an empirical-basis JSON measured directly on **19 activation
+functions × 5 seeds** in a controlled FFN architecture, and reports
+each layer's *measured* drift and variance signature. This is more
+honest *and* more useful — you can now compare GELU vs Mish vs SwiGLU
+on actual fp16 sensitivity, not on a structural classification that
+turned out to be a confound on heterogeneous architectures.
+
+### What changed
+
+  - **Activation registry expanded** from 36 to 51 named classes:
+      - GELU is now correctly split into exact (erf-based, PNE) and
+        tanh-approximation (NOT PNE) forms. Previously all GELU
+        variants — including FastGELUActivation, PytorchGELUTanh,
+        NewGELUActivation — were misclassified as PNE.
+      - QuickGELUActivation now has its own sigmoid-approximation form.
+      - GLU-family added: GLU, GeGLU, SwiGLU, ReGLU. GeGLU inherits
+        erf -> PNE; the other three are EML-elementary.
+      - Softsign, Threshold added.
+  - **`diagnose()` returns per-activation predictions** keyed on torch
+    class name. Each activation layer reports `fp16_drift_predicted`,
+    `fp16_drift_std`, `activation_variance_predicted`,
+    `activation_variance_std`, plus `fp16_risk` and
+    `activation_variance_class` bands (`low` / `normal` / `elevated`)
+    relative to the cross-activation median.
+  - **Honest-finding note baked into the empirical-basis** field:
+    Mann-Whitney U for PNE-vs-EML grouping yielded p=0.085 (fp16) and
+    p=0.79 (variance) — neither reaches alpha=0.05 on the controlled
+    corpus. The 0.4.0 PNE-gated diagnostic ran on heterogeneous
+    architectures where PNE happened to coincide with high-fp16-risk
+    positions; the new lookup is architecture-controlled and reliable.
+
+### Per-activation rankings (E-192, fp16 drift)
+
+Top 5 (highest drift, most fp16-sensitive):
+
+    GeGLU       0.000736   (PNE)
+    SwiGLU      0.000707
+    ReGLU       0.000665
+    QuickGELU   0.000602
+    Softsign    0.000576
+
+Bottom 3 (lowest drift, most fp16-stable):
+
+    Sigmoid     0.000229
+    Hardsigmoid 0.000226
+    Softplus    0.000241
+
+GELU exact lands at 0.000536 (rank 7 of 19). The 3 GLU-family
+activations dominate the high-drift end despite only 1 of 3 being
+classified as PNE — demonstrating the old PNE gate was missing
+real risk.
+
+### Breaking changes
+
+  - `LayerRisk.fp16_risk` enum changed: previously {`low`, `elevated`}
+    (PNE-gated); now {`low`, `normal`, `elevated`, `n/a`} (continuous,
+    median-relative).
+  - `LayerRisk.activation_variance_class` enum changed: previously
+    {`normal`, `saturating`}; now {`low`, `normal`, `elevated`, `n/a`}.
+  - `LayerRisk` gains: `activation_key`, `fp16_drift_predicted`,
+    `fp16_drift_std`, `activation_variance_predicted`,
+    `activation_variance_std`.
+  - `DiagnosisReport.n_layers_with_saturating_variance` removed; use
+    `n_layers_with_elevated_activation_variance` instead.
+  - `DiagnosisReport.empirical_basis` schema changed: keyed by
+    `study=E-192`, `n_activations_measured=19`, etc.
+  - Now requires `eml-cost>=0.6.0` (for the expanded activation forms).
+
+### Migration
+
+If your code reads `fp16_risk`, swap `"elevated"` checks to either
+`"elevated"` (still works, narrower scope) or `report.layers` →
+`fp16_drift_predicted` for the raw measured value.
+
+For users who relied on the PNE flag for fp16 prediction: that flag is
+preserved but no longer drives the risk band. Use
+`is_pfaffian_not_eml` for symbolic optimization-cost questions; use
+`fp16_drift_predicted` and `fp16_risk` for empirical fp16 questions.
+
 ## [0.4.0] — 2026-04-26 — `diagnose()` predictive risk profile
 
 ### Empirical basis (replicated 2026-04-26 with ViT-B/16 added)

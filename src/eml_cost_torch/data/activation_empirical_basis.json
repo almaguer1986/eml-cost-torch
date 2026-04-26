@@ -1,0 +1,229 @@
+{
+  "per_activation": {
+    "ReLU": {
+      "fp16_drift_mean": 0.00045389169623429965,
+      "fp16_drift_std": 7.607429536134957e-06,
+      "act_variance_mean": 0.0001801636925129863,
+      "act_variance_std": 1.0415367030193425e-05,
+      "is_pne": false,
+      "axes": "p0-d1-w0-c0",
+      "n_seeds": 5
+    },
+    "LeakyReLU": {
+      "fp16_drift_mean": 0.0004518526276994647,
+      "fp16_drift_std": 7.5991707259904225e-06,
+      "act_variance_mean": 0.00018102136301878372,
+      "act_variance_std": 1.0581415782326994e-05,
+      "is_pne": false,
+      "axes": "p0-d2-w0-c0",
+      "n_seeds": 5
+    },
+    "ELU": {
+      "fp16_drift_mean": 0.0004677053474029562,
+      "fp16_drift_std": 5.440300076504306e-06,
+      "act_variance_mean": 0.0002560632793802491,
+      "act_variance_std": 1.808603638757766e-05,
+      "is_pne": false,
+      "axes": "p1-d5-w1-c0",
+      "n_seeds": 5
+    },
+    "SELU": {
+      "fp16_drift_mean": 0.000514844515535115,
+      "fp16_drift_std": 9.677551801124374e-06,
+      "act_variance_mean": 0.00039959721745790164,
+      "act_variance_std": 5.630468192414252e-05,
+      "is_pne": false,
+      "axes": "p1-d5-w1-c0",
+      "n_seeds": 5
+    },
+    "GELU": {
+      "fp16_drift_mean": 0.0005364931018725101,
+      "fp16_drift_std": 1.3273767300897698e-05,
+      "act_variance_mean": 0.00014540954531453486,
+      "act_variance_std": 1.8030913221155267e-05,
+      "is_pne": true,
+      "axes": "p3-d5-w3-c0",
+      "n_seeds": 5
+    },
+    "GELU_tanh": {
+      "fp16_drift_mean": 0.0005406581477669103,
+      "fp16_drift_std": 6.232579127569949e-06,
+      "act_variance_mean": 0.00014538167087464895,
+      "act_variance_std": 1.8028270909179524e-05,
+      "is_pne": true,
+      "axes": "p3-d5-w3-c0",
+      "n_seeds": 5
+    },
+    "QuickGELU": {
+      "fp16_drift_mean": 0.0006017714100184375,
+      "fp16_drift_std": 1.6058147406287244e-05,
+      "act_variance_mean": 0.00014578157700643478,
+      "act_variance_std": 1.759074219985892e-05,
+      "is_pne": false,
+      "axes": "p?-d?-w?-c?",
+      "n_seeds": 5
+    },
+    "Mish": {
+      "fp16_drift_mean": 0.0005309644781221758,
+      "fp16_drift_std": 8.989472862965338e-06,
+      "act_variance_mean": 0.0001636653272171245,
+      "act_variance_std": 1.8898583914600392e-05,
+      "is_pne": false,
+      "axes": "p3-d3-w3-c0",
+      "n_seeds": 5
+    },
+    "SiLU": {
+      "fp16_drift_mean": 0.0005181878264192781,
+      "fp16_drift_std": 8.041453272372173e-06,
+      "act_variance_mean": 0.0001259948691862736,
+      "act_variance_std": 1.576051032999222e-05,
+      "is_pne": false,
+      "axes": "p1-d2-w1-c0",
+      "n_seeds": 5
+    },
+    "Softplus": {
+      "fp16_drift_mean": 0.00024053200019546342,
+      "fp16_drift_std": 1.215480641084828e-06,
+      "act_variance_mean": 0.00010603293342913061,
+      "act_variance_std": 7.606224460087709e-06,
+      "is_pne": false,
+      "axes": "p2-d1-w2-c-1",
+      "n_seeds": 5
+    },
+    "Softsign": {
+      "fp16_drift_mean": 0.0005762415479392696,
+      "fp16_drift_std": 6.271869374670512e-06,
+      "act_variance_mean": 0.00012916058790530489,
+      "act_variance_std": 1.1560831723625996e-05,
+      "is_pne": false,
+      "axes": "p0-d4-w0-c0",
+      "n_seeds": 5
+    },
+    "Tanh": {
+      "fp16_drift_mean": 0.00049690141059652,
+      "fp16_drift_std": 6.842899573953963e-06,
+      "act_variance_mean": 0.00022226060321403428,
+      "act_variance_std": 1.8254003850713322e-05,
+      "is_pne": false,
+      "axes": "p1-d1-w1-c0",
+      "n_seeds": 5
+    },
+    "Sigmoid": {
+      "fp16_drift_mean": 0.00022867940743707065,
+      "fp16_drift_std": 6.828702498632224e-07,
+      "act_variance_mean": 3.895765825646514e-05,
+      "act_variance_std": 3.19679308782296e-06,
+      "is_pne": false,
+      "axes": "p1-d1-w1-c-1",
+      "n_seeds": 5
+    },
+    "Hardswish": {
+      "fp16_drift_mean": 0.0005148968082987971,
+      "fp16_drift_std": 9.81177499731834e-06,
+      "act_variance_mean": 0.00011608132199556762,
+      "act_variance_std": 1.375798911272699e-05,
+      "is_pne": false,
+      "axes": "p0-d5-w0-c0",
+      "n_seeds": 5
+    },
+    "Hardsigmoid": {
+      "fp16_drift_mean": 0.0002263333825631866,
+      "fp16_drift_std": 1.316979784511771e-06,
+      "act_variance_mean": 2.6289924722406953e-05,
+      "act_variance_std": 1.710573296400015e-06,
+      "is_pne": false,
+      "axes": "p0-d4-w0-c0",
+      "n_seeds": 5
+    },
+    "GLU": {
+      "fp16_drift_mean": 0.0004979443921348554,
+      "fp16_drift_std": 8.625018086218644e-06,
+      "act_variance_mean": 0.0001084315953956942,
+      "act_variance_std": 1.1622118509281064e-05,
+      "is_pne": false,
+      "axes": "p1-d2-w1-c0",
+      "n_seeds": 5
+    },
+    "GeGLU": {
+      "fp16_drift_mean": 0.0007364730075225593,
+      "fp16_drift_std": 3.6199918300633645e-05,
+      "act_variance_mean": 9.07878893699495e-05,
+      "act_variance_std": 2.1989083162549952e-05,
+      "is_pne": true,
+      "axes": "p3-d5-w3-c0",
+      "n_seeds": 5
+    },
+    "SwiGLU": {
+      "fp16_drift_mean": 0.000707178705283418,
+      "fp16_drift_std": 3.1087955909123384e-05,
+      "act_variance_mean": 8.29849924393867e-05,
+      "act_variance_std": 2.184505270990788e-05,
+      "is_pne": false,
+      "axes": "p1-d2-w1-c0",
+      "n_seeds": 5
+    },
+    "ReGLU": {
+      "fp16_drift_mean": 0.0006649184597675201,
+      "fp16_drift_std": 2.9549600069593974e-05,
+      "act_variance_mean": 0.00010482710293812907,
+      "act_variance_std": 2.12242680916422e-05,
+      "is_pne": false,
+      "axes": "p0-d2-w0-c0",
+      "n_seeds": 5
+    }
+  },
+  "class_to_activation": {
+    "ReLU": "ReLU",
+    "ReLU6": "ReLU",
+    "LeakyReLU": "LeakyReLU",
+    "PReLU": "LeakyReLU",
+    "RReLU": "LeakyReLU",
+    "Hardtanh": "LeakyReLU",
+    "Hardshrink": "LeakyReLU",
+    "Softshrink": "LeakyReLU",
+    "ELU": "ELU",
+    "CELU": "ELU",
+    "SELU": "SELU",
+    "GELU": "GELU",
+    "GELUActivation": "GELU",
+    "ClippedGELUActivation": "GELU",
+    "AccurateGELUActivation": "GELU",
+    "NewGELUActivation": "GELU_tanh",
+    "FastGELUActivation": "GELU_tanh",
+    "PytorchGELUTanh": "GELU_tanh",
+    "QuickGELUActivation": "QuickGELU",
+    "Mish": "Mish",
+    "MishActivation": "Mish",
+    "SiLU": "SiLU",
+    "Softplus": "Softplus",
+    "Softsign": "Softsign",
+    "Tanh": "Tanh",
+    "Tanhshrink": "Tanh",
+    "Sigmoid": "Sigmoid",
+    "LogSigmoid": "Sigmoid",
+    "Hardswish": "Hardswish",
+    "Hardsigmoid": "Hardsigmoid",
+    "GLU": "GLU",
+    "GeGLU": "GeGLU",
+    "GEGLU": "GeGLU",
+    "SwiGLU": "SwiGLU",
+    "SWIGLU": "SwiGLU",
+    "ReGLU": "ReGLU",
+    "REGLU": "ReGLU"
+  },
+  "thresholds": {
+    "fp16_median": 0.0005148968082987971,
+    "act_variance_median": 0.00012916058790530489
+  },
+  "meta": {
+    "session": "E-192",
+    "date": "2026-04-26",
+    "architecture": "4-block FFN, hidden=128, batch=32",
+    "n_seeds_per_activation": 5,
+    "n_perturbation_samples": 8,
+    "perturbation_sigma": 0.05,
+    "n_activations_measured": 19,
+    "metric_units": "relative L2 (fp16_drift), mean abs std (act_variance)",
+    "honest_note": "Mann-Whitney U on PNE-vs-EML grouping yielded p=0.085 for fp16 drift and p=0.79 for activation variance \u2014 neither reaches alpha=0.05 on this controlled corpus. The diagnostic in 0.4.0 attributed elevated risk to PNE classification; on this controlled-architecture corpus PNE alone is not a reliable predictor. The reliable predictor is the activation identity itself; this JSON ships per-activation empirical signatures so the diagnostic can return measured values rather than structural predictions."
+  }
+}

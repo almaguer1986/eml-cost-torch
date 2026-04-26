@@ -83,11 +83,14 @@ json.dumps(profile_dict(model))
 
 ## Supported torch.nn classes
 
-50+ classes registered out of the box, including:
+60+ classes registered out of the box, including:
 
 - **Linear / Conv** (`Linear`, `Conv1d/2d/3d`, `ConvTranspose*`)
-- **Activations** (`ReLU`, `GELU`, `Sigmoid`, `Tanh`, `SiLU`, `Mish`,
-  `ELU`, `Softmax`, ...)
+- **Activations** (`ReLU`, `GELU` exact + tanh-approx, `Sigmoid`,
+  `Tanh`, `SiLU`, `Mish`, `ELU`, `SELU`, `Softplus`, `Softsign`,
+  `Hardswish`, `Hardsigmoid`, `QuickGELU`, `Softmax`, ...)
+- **Gated linear units** (`GLU`, `GeGLU`, `SwiGLU`, `ReGLU` — see
+  [README of e.g. LLaMA / Gemma / Mistral architectures](https://arxiv.org/abs/2002.05202))
 - **Normalisation** (`LayerNorm`, `BatchNorm*`, `GroupNorm`, `RMSNorm`)
 - **Pooling** (`MaxPool*`, `AvgPool*`, adaptive variants)
 - **Regularisation** (`Dropout`, `AlphaDropout`)
@@ -95,6 +98,51 @@ json.dumps(profile_dict(model))
 - **Attention** (`MultiheadAttention` — simplified score)
 
 Unknown layer classes are reported as `UNKNOWN` rather than raising.
+
+## diagnose(model) — empirical fp16 / variance signature
+
+```python
+from eml_cost_torch import diagnose
+import torch.nn as nn
+
+model = nn.Sequential(
+    nn.Linear(64, 128), nn.GELU(approximate="none"),
+    nn.Linear(128, 128), nn.SwiGLU(),
+    nn.Linear(128, 32),
+)
+report = diagnose(model)
+print(report)
+```
+
+`diagnose()` reports per-activation **measured** fp16 drift and
+activation variance from the E-192 controlled study (19 activations
+× 5 seeds on a fixed FFN). Each activation layer gets:
+
+- `fp16_drift_predicted` — empirical mean relative L2 fp16 drift.
+- `activation_variance_predicted` — empirical mean abs std under input
+  perturbation.
+- `fp16_risk` / `activation_variance_class` — `low` / `normal` /
+  `elevated` band relative to the cross-activation median.
+
+Top-5 highest-fp16-drift activations from E-192:
+
+    GeGLU       0.000736
+    SwiGLU      0.000707
+    ReGLU       0.000665
+    QuickGELU   0.000602
+    Softsign    0.000576
+
+Bottom-3 (most fp16-stable):
+
+    Sigmoid     0.000229
+    Hardsigmoid 0.000226
+    Softplus    0.000241
+
+**Honest caveat baked into the report.** On the controlled corpus,
+the symbolic Pfaffian-not-EML classification is *not* a reliable
+predictor of fp16 drift (Mann-Whitney U p=0.085). The empirical
+lookup is the reliable signal. The PNE flag is still reported for
+transparency and for symbolic-optimization-cost reasoning.
 
 ## See also
 
