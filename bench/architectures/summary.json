@@ -1,0 +1,260 @@
+{
+  "architectures": [
+    "gpt2",
+    "bert-base",
+    "resnet-50",
+    "vit-b-16"
+  ],
+  "per_architecture": {
+    "gpt2": {
+      "n_layers_total": 124,
+      "n_layers_known": 64,
+      "n_layers_unknown": 60,
+      "coverage_pct": 51.6,
+      "pfaffian_r": {
+        "min": 0,
+        "max": 1,
+        "mean": 0.39,
+        "distribution": {
+          "0": 39,
+          "1": 25
+        }
+      },
+      "eml_depth": {
+        "min": 0,
+        "max": 4,
+        "mean": 1.56,
+        "distribution": {
+          "0": 39,
+          "4": 25
+        }
+      },
+      "predicted_depth": {
+        "min": 0,
+        "max": 4,
+        "mean": 1.56
+      },
+      "axes_distribution": {
+        "p0-d0-w0-c0": 39,
+        "p1-d4-w1-c0": 25
+      },
+      "class_distribution": {
+        "Conv1D": 48,
+        "Dropout": 37,
+        "LayerNorm": 25,
+        "NewGELUActivation": 12,
+        "Embedding": 2
+      },
+      "unknown_class_distribution": {
+        "Conv1D": 48,
+        "NewGELUActivation": 12
+      },
+      "pfaffian_not_eml_count": 0
+    },
+    "bert-base": {
+      "n_layers_total": 151,
+      "n_layers_known": 139,
+      "n_layers_unknown": 12,
+      "coverage_pct": 92.1,
+      "pfaffian_r": {
+        "min": 0,
+        "max": 1,
+        "mean": 0.19,
+        "distribution": {
+          "0": 113,
+          "1": 26
+        }
+      },
+      "eml_depth": {
+        "min": 0,
+        "max": 4,
+        "mean": 1.78,
+        "distribution": {
+          "0": 40,
+          "4": 25,
+          "2": 73,
+          "1": 1
+        }
+      },
+      "predicted_depth": {
+        "min": 0,
+        "max": 4,
+        "mean": 1.78
+      },
+      "axes_distribution": {
+        "p0-d2-w0-c0": 73,
+        "p0-d0-w0-c0": 40,
+        "p1-d4-w1-c0": 25,
+        "p1-d1-w1-c0": 1
+      },
+      "class_distribution": {
+        "Linear": 73,
+        "Dropout": 37,
+        "LayerNorm": 25,
+        "GELUActivation": 12,
+        "Embedding": 3,
+        "Tanh": 1
+      },
+      "unknown_class_distribution": {
+        "GELUActivation": 12
+      },
+      "pfaffian_not_eml_count": 0
+    },
+    "resnet-50": {
+      "n_layers_total": 126,
+      "n_layers_known": 126,
+      "n_layers_unknown": 0,
+      "coverage_pct": 100.0,
+      "pfaffian_r": {
+        "min": 0,
+        "max": 1,
+        "mean": 0.42,
+        "distribution": {
+          "0": 73,
+          "1": 53
+        }
+      },
+      "eml_depth": {
+        "min": 0,
+        "max": 5,
+        "mean": 3.1,
+        "distribution": {
+          "2": 54,
+          "5": 53,
+          "1": 17,
+          "0": 2
+        }
+      },
+      "predicted_depth": {
+        "min": 0,
+        "max": 5,
+        "mean": 2.96
+      },
+      "axes_distribution": {
+        "p0-d2-w0-c0": 54,
+        "p1-d5-w1-c0": 53,
+        "p0-d1-w0-c0": 17,
+        "p0-d0-w0-c0": 2
+      },
+      "class_distribution": {
+        "Conv2d": 53,
+        "BatchNorm2d": 53,
+        "ReLU": 17,
+        "MaxPool2d": 1,
+        "AdaptiveAvgPool2d": 1,
+        "Linear": 1
+      },
+      "unknown_class_distribution": {},
+      "pfaffian_not_eml_count": 0
+    },
+    "vit-b-16": {
+      "n_layers_total": 112,
+      "n_layers_known": 112,
+      "n_layers_unknown": 0,
+      "coverage_pct": 100.0,
+      "pfaffian_r": {
+        "min": 0,
+        "max": 3,
+        "mean": 0.54,
+        "distribution": {
+          "0": 75,
+          "1": 25,
+          "3": 12
+        }
+      },
+      "eml_depth": {
+        "min": 0,
+        "max": 5,
+        "mean": 2.11,
+        "distribution": {
+          "2": 38,
+          "0": 37,
+          "4": 25,
+          "5": 12
+        }
+      },
+      "predicted_depth": {
+        "min": 0,
+        "max": 6,
+        "mean": 2.21
+      },
+      "axes_distribution": {
+        "p0-d2-w0-c0": 38,
+        "p0-d0-w0-c0": 37,
+        "p1-d4-w1-c0": 25,
+        "p3-d5-w3-c0": 12
+      },
+      "class_distribution": {
+        "Dropout": 37,
+        "LayerNorm": 25,
+        "Linear": 25,
+        "NonDynamicallyQuantizableLinear": 12,
+        "GELU": 12,
+        "Conv2d": 1
+      },
+      "unknown_class_distribution": {},
+      "pfaffian_not_eml_count": 12
+    }
+  },
+  "comparison_table": [
+    {
+      "name": "gpt2",
+      "n_layers": 124,
+      "coverage_pct": 51.6,
+      "pfaffian_r_max": 1,
+      "eml_depth_max": 4,
+      "predicted_depth_max": 4,
+      "pfaffian_not_eml_count": 0,
+      "n_axes_classes": 2,
+      "top_axes": [
+        "p0-d0-w0-c0",
+        "p1-d4-w1-c0"
+      ]
+    },
+    {
+      "name": "bert-base",
+      "n_layers": 151,
+      "coverage_pct": 92.1,
+      "pfaffian_r_max": 1,
+      "eml_depth_max": 4,
+      "predicted_depth_max": 4,
+      "pfaffian_not_eml_count": 0,
+      "n_axes_classes": 4,
+      "top_axes": [
+        "p0-d2-w0-c0",
+        "p0-d0-w0-c0",
+        "p1-d4-w1-c0"
+      ]
+    },
+    {
+      "name": "resnet-50",
+      "n_layers": 126,
+      "coverage_pct": 100.0,
+      "pfaffian_r_max": 1,
+      "eml_depth_max": 5,
+      "predicted_depth_max": 5,
+      "pfaffian_not_eml_count": 0,
+      "n_axes_classes": 4,
+      "top_axes": [
+        "p0-d2-w0-c0",
+        "p1-d5-w1-c0",
+        "p0-d1-w0-c0"
+      ]
+    },
+    {
+      "name": "vit-b-16",
+      "n_layers": 112,
+      "coverage_pct": 100.0,
+      "pfaffian_r_max": 3,
+      "eml_depth_max": 5,
+      "predicted_depth_max": 6,
+      "pfaffian_not_eml_count": 12,
+      "n_axes_classes": 4,
+      "top_axes": [
+        "p0-d2-w0-c0",
+        "p0-d0-w0-c0",
+        "p1-d4-w1-c0"
+      ]
+    }
+  ]
+}
