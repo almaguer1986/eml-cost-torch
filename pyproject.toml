@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "eml-cost-torch"
-version = "0.3.1"
+version = "0.4.0"
 description = "Per-layer Pfaffian profile and EML routing depth for any torch.nn.Module."
 readme = "README.md"
 requires-python = ">=3.10"

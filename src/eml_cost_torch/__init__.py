@@ -26,6 +26,7 @@ For machine-readable JSON-friendly output:
 from __future__ import annotations
 
 from .classify import LayerProfile, classify_form, classify_layer
+from .diagnose import DiagnosisReport, LayerRisk, diagnose
 from .profile import profile, profile_dict
 from .registry import (
     TORCH_LAYER_REGISTRY,
@@ -34,7 +35,7 @@ from .registry import (
 )
 from .summary import summary
 
-__version__ = "0.3.1"
+__version__ = "0.4.0"
 
 __all__ = [
     "__version__",
@@ -47,4 +48,7 @@ __all__ = [
     "TORCH_LAYER_REGISTRY",
     "known_layer_names",
     "lookup_form",
+    "diagnose",
+    "DiagnosisReport",
+    "LayerRisk",
 ]
