@@ -14,3 +14,6 @@ venv/
 .env
 .tox/
 *.egg
+
+# Graphify analysis output (config in .graphifyignore is committed)
+graphify-out/
